@@ -8,5 +8,7 @@ services:
       - ./data:/app/data
     environment:
       - BOT_TOKEN=${BOT_TOKEN}
-      - ADMIN_ID=${ADMIN_ID}
+      - ADMIN_IDS=${ADMIN_IDS}
+      - VALID_CODE=${VALID_CODE}
+      - WELCOME_VIDEO_NOTES=${WELCOME_VIDEO_NOTES}
     restart: always
