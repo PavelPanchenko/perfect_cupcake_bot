@@ -22,14 +22,13 @@ MESSAGE_COMMAND = (
     # "/recipe - Получить случайный рецепт\n"
     # "/all_recipes - Получить все рецепты\n"
     # "/start - Начать работу с ботом"
-    "Команди:\n"
+    "Що можно зробити:\n"
     "/recipe - Отримати випадковий рецепт\n"
     "/all_recipes - Отримати всі рецепти\n"
-    "/start - Почати роботу з ботом"
 )
 
 MESSAGE_WELCOME_BIG = (
-    "Вітаю, друзі! 👩‍🍳👨‍🍳\n\n"
+    "Привіт, друзі! 👩‍🍳👨‍🍳\n\n"
     "Радий вітати вас на моєму курсі “Секрет ідеального кексу”.\n\n"
     "На цьому курсі ви отримаєте:\n"
     "✅ Детальні покрокові рецепти, які гарантовано допоможуть створити кекси вашої мрії.\n"
@@ -40,6 +39,16 @@ MESSAGE_WELCOME_BIG = (
     "🌟 Переходьте до матеріалів, пробуйте, експериментуйте – і ваші кекси стануть зірками кожного столу!\n\n"
     "Бажаю вам натхнення і смачної випічки!"
 )
+
+
+# @user_router.message()
+# async def get_file_id(message: types.Message):
+#     if message.document:
+#         await message.answer(message.document.file_id)
+#     elif message.photo:
+#         await message.answer(message.photo[-1].file_id)
+#     elif message.video:
+#         await message.answer(message.video.file_id)
 
 
 @user_router.message(CommandStart(deep_link=True))
@@ -90,11 +99,13 @@ async def cmd_all_recipes(message: types.Message):
                     media=recipe.image,
                     caption=f"🍳 {recipe.title}\n\n{recipe.text}",
                     caption_entities=message.entities,
+                    # show_caption_above_media=True,
                 ),
                 InputMediaVideo(
                     media=recipe.video,
-                    caption=f"🍳 {recipe.title}\n\n{recipe.text}",
-                    caption_entities=message.entities,
+                    # caption=f"🍳 {recipe.title}\n\n{recipe.text}",
+                    # caption_entities=message.entities,
+                    # show_caption_above_media=True,
                 ),
             ]
             await message.answer_media_group(media, protect_content=True)
@@ -120,10 +131,14 @@ async def cmd_random_recipe(message: types.Message):
     if recipe.video:
         media = [
             InputMediaPhoto(
-                media=recipe.image, caption=f"🍳 {recipe.title}\n\n{recipe.text}"
+                media=recipe.image,
+                caption=f"🍳 {recipe.title}\n\n{recipe.text}",
+                # show_caption_above_media=True,
             ),
             InputMediaVideo(
-                media=recipe.video, caption=f"🍳 {recipe.title}\n\n{recipe.text}"
+                media=recipe.video,
+                # caption=f"🍳 {recipe.title}\n\n{recipe.text}",
+                # show_caption_above_media=True,
             ),
         ]
 
