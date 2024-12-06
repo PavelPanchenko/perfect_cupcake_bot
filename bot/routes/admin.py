@@ -42,6 +42,7 @@ def is_admin(message: types.Message) -> bool:
 @admin_router.message(Command("admin"))
 async def cmd_admin_help(message: types.Message, state: FSMContext):
     if not is_admin(message):
+        await message.answer("Вы не администратор.")
         return
 
     await state.clear()

@@ -16,12 +16,18 @@ logger = logging.getLogger(__name__)
 user_router = Router()
 
 MESSAGE_WELCOME = (
-    "👋 Добро пожаловать в кулинарный бот!\n"
-    "Здесь вы найдете множество вкусных рецептов.\n\n"
-    "Команды:\n"
-    "/recipe - Получить случайный рецепт\n"
-    "/all_recipes - Получить все рецепты\n"
-    "/start - Начать работу с ботом"
+    # "👋 Добро пожаловать в кулинарный бот!\n"
+    # "Здесь вы найдете множество вкусных рецептов.\n\n"
+    # "Команды:\n"
+    # "/recipe - Получить случайный рецепт\n"
+    # "/all_recipes - Получить все рецепты\n"
+    # "/start - Начать работу с ботом"
+    "👋 Ласкаво просимо до кулінарного боту!\n"
+    "Тут ви знайдете безліч смачних рецептів.\n\n"
+    "Команди:\n"
+    "/recipe - Отримати випадковий рецепт\n"
+    "/all_recipes - Отримати всі рецепти\n"
+    "/start - Почати роботу з ботом"
 )
 
 
@@ -39,7 +45,7 @@ async def cmd_start_with_deep_link(message: types.Message, command: CommandObjec
     if payload != settings.VALID_CODE:
         return
     for note in settings.WELCOME_VIDEO_NOTES:
-        await message.answer_video_note(note)
+        await message.answer_video_note(note, protect_content=True)
         await asyncio.sleep(2)
     await message.answer(
         MESSAGE_WELCOME,
@@ -67,10 +73,14 @@ async def cmd_all_recipes(message: types.Message):
         if recipe.video:
             media = [
                 InputMediaPhoto(
-                    media=recipe.image, caption=f"🍳 {recipe.title}\n\n{recipe.text}"
+                    media=recipe.image,
+                    caption=f"🍳 {recipe.title}\n\n{recipe.text}",
+                    caption_entities=message.entities,
                 ),
                 InputMediaVideo(
-                    media=recipe.video, caption=f"🍳 {recipe.title}\n\n{recipe.text}"
+                    media=recipe.video,
+                    caption=f"🍳 {recipe.title}\n\n{recipe.text}",
+                    caption_entities=message.entities,
                 ),
             ]
             await message.answer_media_group(media, protect_content=True)
@@ -78,6 +88,7 @@ async def cmd_all_recipes(message: types.Message):
             await message.answer_photo(
                 photo=recipe.image,
                 caption=f"🍳 {recipe.title}\n\n{recipe.text}",
+                caption_entities=message.entities,
                 protect_content=True,
             )
         await asyncio.sleep(0.5)  # Prevent flood limits
@@ -92,12 +103,6 @@ async def cmd_random_recipe(message: types.Message):
         return
 
     recipe = random.choice(recipes)
-    await message.answer_photo(
-        photo=recipe.image,
-        caption=f"🍳 {recipe.title}\n\n{recipe.text}",
-        protect_content=True,
-    )
-
     if recipe.video:
         media = [
             InputMediaPhoto(
@@ -108,4 +113,10 @@ async def cmd_random_recipe(message: types.Message):
             ),
         ]
 
-        await message.answer_media_group(media)
+        await message.answer_media_group(media, protect_content=True)
+    else:
+        await message.answer_photo(
+            photo=recipe.image,
+            caption=f"🍳 {recipe.title}\n\n{recipe.text}",
+            protect_content=True,
+        )
