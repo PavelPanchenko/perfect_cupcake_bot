@@ -15,15 +15,13 @@ logger = logging.getLogger(__name__)
 
 user_router = Router()
 
-MESSAGE_WELCOME = (
+MESSAGE_COMMAND = (
     # "👋 Добро пожаловать в кулинарный бот!\n"
     # "Здесь вы найдете множество вкусных рецептов.\n\n"
     # "Команды:\n"
     # "/recipe - Получить случайный рецепт\n"
     # "/all_recipes - Получить все рецепты\n"
     # "/start - Начать работу с ботом"
-    "👋 Ласкаво просимо до кулінарного боту!\n"
-    "Тут ви знайдете безліч смачних рецептів.\n\n"
     "Команди:\n"
     "/recipe - Отримати випадковий рецепт\n"
     "/all_recipes - Отримати всі рецепти\n"
@@ -64,7 +62,7 @@ async def cmd_start_with_deep_link(message: types.Message, command: CommandObjec
         await message.answer_video_note(note, protect_content=True)
         await asyncio.sleep(2)
     await message.answer(
-        MESSAGE_WELCOME,
+        MESSAGE_COMMAND,
     )
 
 
@@ -75,7 +73,7 @@ async def cmd_start(message: types.Message):
     user = await get_one_user(user_id)
     if not user:
         return
-    await message.answer(MESSAGE_WELCOME)
+    await message.answer(MESSAGE_COMMAND)
 
 
 @user_router.message(Command("all_recipes"))
