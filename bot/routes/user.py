@@ -60,8 +60,6 @@ async def cmd_start_with_deep_link(message: types.Message, command: CommandObjec
     verify_deep_link = command.args
     payload = decode_payload(verify_deep_link)
 
-    print(payload)
-
     if not payload:
         return
     if payload != settings.VALID_CODE:
