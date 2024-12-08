@@ -60,6 +60,8 @@ async def cmd_start_with_deep_link(message: types.Message, command: CommandObjec
     verify_deep_link = command.args
     payload = decode_payload(verify_deep_link)
 
+    print(payload)
+
     if not payload:
         return
     if payload != settings.VALID_CODE:
@@ -93,29 +95,34 @@ async def cmd_all_recipes(message: types.Message):
         return
 
     for recipe in recipes:
+        caption = f"🍳 {recipe.title}\n\n{recipe.text}"
         if recipe.video:
             media = [
                 InputMediaPhoto(
                     media=recipe.image,
-                    caption=f"🍳 {recipe.title}\n\n{recipe.text}",
+                    caption=caption if len(caption) <= 1024 else recipe.title,
                     caption_entities=message.entities,
                     # show_caption_above_media=True,
                 ),
                 InputMediaVideo(
                     media=recipe.video,
-                    # caption=f"🍳 {recipe.title}\n\n{recipe.text}",
-                    # caption_entities=message.entities,
-                    # show_caption_above_media=True,
+                    caption=recipe.title if len(caption) >= 1024 else None,
                 ),
             ]
-            await message.answer_media_group(media, protect_content=True)
+            await message.answer_media_group(
+                media,
+                protect_content=True,
+            )
+
         else:
             await message.answer_photo(
                 photo=recipe.image,
-                caption=f"🍳 {recipe.title}\n\n{recipe.text}",
+                caption=caption if len(caption) <= 1024 else recipe.title,
                 caption_entities=message.entities,
                 protect_content=True,
             )
+        if len(caption) > 1024:
+            await message.answer(caption, protect_content=True)
         await asyncio.sleep(0.5)  # Prevent flood limits
 
 
@@ -128,24 +135,26 @@ async def cmd_random_recipe(message: types.Message):
         return
 
     recipe = random.choice(recipes)
+    caption = f"🍳 {recipe.title}\n\n{recipe.text}"
     if recipe.video:
         media = [
             InputMediaPhoto(
                 media=recipe.image,
-                caption=f"🍳 {recipe.title}\n\n{recipe.text}",
-                # show_caption_above_media=True,
+                caption=caption if len(caption) <= 1024 else recipe.title,
             ),
             InputMediaVideo(
                 media=recipe.video,
-                # caption=f"🍳 {recipe.title}\n\n{recipe.text}",
-                # show_caption_above_media=True,
+                caption=recipe.title if len(caption) >= 1024 else None,
             ),
         ]
 
         await message.answer_media_group(media, protect_content=True)
+
     else:
         await message.answer_photo(
             photo=recipe.image,
-            caption=f"🍳 {recipe.title}\n\n{recipe.text}",
+            caption=caption if len(caption) <= 1024 else recipe.title,
             protect_content=True,
         )
+    if len(caption) > 1024:
+        await message.answer(caption, protect_content=True)
