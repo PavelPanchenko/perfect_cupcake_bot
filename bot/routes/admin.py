@@ -347,10 +347,10 @@ async def process_field_update(message: types.Message, state: FSMContext):
             return
         update_data["image"] = message.photo[-1].file_id
     elif field == "video":
-        if not message.video_note:
-            await message.answer("Пожалуйста, отправьте видео кружочком.")
+        if not message.video:
+            await message.answer("Пожалуйста, отправьте видео.")
             return
-        update_data["video"] = message.video_note.file_id
+        update_data["video"] = message.video.file_id
 
     # Update recipe
     updated_recipe = await update_recipe(recipe_id=recipe_id, **update_data)

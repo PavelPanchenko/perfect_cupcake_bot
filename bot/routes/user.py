@@ -93,7 +93,7 @@ async def cmd_all_recipes(message: types.Message):
         return
 
     for recipe in recipes:
-        caption = f"🍳 {recipe.title}\n\n{recipe.text}"
+        caption = f"{recipe.title}\n\n{recipe.text}"
         if recipe.video:
             media = [
                 InputMediaPhoto(
@@ -133,7 +133,7 @@ async def cmd_random_recipe(message: types.Message):
         return
 
     recipe = random.choice(recipes)
-    caption = f"🍳 {recipe.title}\n\n{recipe.text}"
+    caption = f"{recipe.title}\n\n{recipe.text}"
     if recipe.video:
         media = [
             InputMediaPhoto(
