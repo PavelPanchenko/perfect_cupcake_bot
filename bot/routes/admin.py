@@ -308,7 +308,7 @@ async def process_field_selection(callback: types.CallbackQuery, state: FSMConte
         "title": "Введите новое название рецепта:",
         "text": "Введите новое описание рецепта:",
         "image": "Отправьте новое фото рецепта:",
-        "video": "Отправьте новое видео рецепта (кружочком):",
+        "video": "Отправьте новое видео рецепта:",
     }
 
     await callback.message.answer(messages[field])
