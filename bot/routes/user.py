@@ -87,6 +87,11 @@ async def cmd_start(message: types.Message):
 
 @user_router.message(Command("all_recipes"))
 async def cmd_all_recipes(message: types.Message):
+    user_id = message.from_user.id
+    user = await get_one_user(user_id)
+    if not user:
+        return
+
     recipes = await get_all_recipes()
     if not recipes:
         await message.answer("Пока нет доступных рецептов.")
@@ -126,6 +131,11 @@ async def cmd_all_recipes(message: types.Message):
 
 @user_router.message(Command("recipe"))
 async def cmd_random_recipe(message: types.Message):
+    user_id = message.from_user.id
+    user = await get_one_user(user_id)
+    if not user:
+        return
+
     """Send a random recipe to the user"""
     recipes = await get_all_recipes()
     if not recipes:
