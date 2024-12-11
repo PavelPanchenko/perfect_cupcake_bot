@@ -55,8 +55,6 @@ MESSAGE_WELCOME_BIG = (
 async def cmd_start_with_deep_link(message: types.Message, command: CommandObject):
     user_id = message.from_user.id
 
-    await add_user(user_id)
-
     verify_deep_link = command.args
     payload = decode_payload(verify_deep_link)
 
@@ -64,6 +62,8 @@ async def cmd_start_with_deep_link(message: types.Message, command: CommandObjec
         return
     if payload != settings.VALID_CODE:
         return
+
+    await add_user(user_id)
 
     await message.answer(MESSAGE_WELCOME_BIG)
     await asyncio.sleep(0.5)
